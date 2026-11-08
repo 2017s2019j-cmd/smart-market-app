@@ -1,0 +1,517 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const SmartMarketApp());
+}
+
+class SmartMarketApp extends StatelessWidget {
+  const SmartMarketApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Smart Market App',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF0D0D0D),
+        primaryColor: const Color(0xFF39FF14),
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFF39FF14),
+          secondary: Color(0xFF1E1E1E),
+          surface: Color(0xFF1A1A1A),
+          background: Color(0xFF0D0D0D),
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Colors.white70),
+        ),
+      ),
+      home: const MainNavigationScreen(),
+    );
+  }
+}
+
+class MainNavigationScreen extends StatefulWidget {
+  const MainNavigationScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
+}
+
+class _MainNavigationScreenState extends State<MainNavigationScreen> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const MerchantDashboardScreen(),
+    const BuyerBrowseScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        backgroundColor: const Color(0xFF1A1A1A),
+        selectedItemColor: const Color(0xFF39FF14),
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.storefront),
+            label: 'ط§ظ„طھط§ط¬ط±',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag),
+            label: 'ط§ظ„ظ…ط´طھط±ظٹ',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// -------------------------------------------------------------
+// 1. Merchant Dashboard Screen (ظˆط§ط¬ظ‡ط© ط§ظ„طھط§ط¬ط±)
+// -------------------------------------------------------------
+class MerchantDashboardScreen extends StatelessWidget {
+  const MerchantDashboardScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'ظ„ظˆط­ط© طھط­ظƒظ… ط§ظ„طھط§ط¬ط±',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF1A1A1A),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications, color: Color(0xFF39FF14)),
+            onPressed: () {},
+          )
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'ط£ظ‡ظ„ط§ظ‹ ط¨ظƒ ظ…ط¬ط¯ط¯ط§ظ‹طŒ',
+              style: TextStyle(fontSize: 18, color: Colors.white70),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'ظ…ظ„ط®طµ ط£ط¹ظ…ط§ظ„ظƒ ط§ظ„ظٹظˆظ…',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF39FF14)),
+            ),
+            const SizedBox(height: 24),
+            GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              children: const [
+                DashboardCard(
+                  title: 'ط¥ط¬ظ…ط§ظ„ظٹ ط§ظ„ظ…ط¨ظٹط¹ط§طھ',
+                  value: '15,420 ط¯.ط£',
+                  icon: Icons.monetization_on,
+                  iconColor: Colors.amber,
+                ),
+                DashboardCard(
+                  title: 'ط§ظ„ط£ط±ط¨ط§ط­ ط§ظ„طµط§ظپظٹط©',
+                  value: '4,850 ط¯.ط£',
+                  icon: Icons.trending_up,
+                  iconColor: Color(0xFF39FF14),
+                ),
+                DashboardCard(
+                  title: 'ط¥ط¯ط§ط±ط© ط§ظ„ظ…ط®ط²ظ†',
+                  value: '320 ظ…ظ†طھط¬',
+                  icon: Icons.inventory,
+                  iconColor: Colors.blue,
+                ),
+                DashboardCard(
+                  title: 'ط§ظ„ط·ظ„ط¨ط§طھ ط§ظ„ط¬ط¯ظٹط¯ط©',
+                  value: '18 ط·ظ„ط¨',
+                  icon: Icons.local_shipping,
+                  iconColor: Colors.purple,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DashboardCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color iconColor;
+
+  const DashboardCard({
+    Key? key,
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.iconColor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1A1A),
+        borderRadius: BorderRadius.circular(16.0),
+        border: Border.all(color: const Color(0xFF2A2A2A), width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF39FF14).withOpacity(0.03),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.between,
+            children: [
+              Icon(icon, color: iconColor, size: 28),
+              Icon(Icons.arrow_forward_ios, color: Colors.grey.withOpacity(0.5), size: 14),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(fontSize: 14, color: Colors.white70),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                value,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// -------------------------------------------------------------
+// 2. Buyer Browse Screen (ظˆط§ط¬ظ‡ط© ط§ظ„ظ…ط´طھط±ظٹ)
+// -------------------------------------------------------------
+class BuyerBrowseScreen extends StatefulWidget {
+  const BuyerBrowseScreen({Key? key}) : super(key: key);
+
+  @override
+  State<BuyerBrowseScreen> createState() => _BuyerBrowseScreenState();
+}
+
+class _BuyerBrowseScreenState extends State<BuyerBrowseScreen> {
+  // Sample Product List
+  final List<Map<String, dynamic>> _products = [
+    {'name': 'ظ‡ط§طھظپ ط°ظƒظٹ ط¨ط±ظˆ', 'price': 899, 'image': 'ًں“±', 'category': 'ط¥ظ„ظƒطھط±ظˆظ†ظٹط§طھ'},
+    {'name': 'ط³ط§ط¹ط© ط°ظƒظٹط© ط±ظٹط§ط¶ظٹط©', 'price': 199, 'image': 'âŒڑ', 'category': 'ط¥ظ„ظƒطھط±ظˆظ†ظٹط§طھ'},
+    {'name': 'ط³ظ…ط§ط¹ط§طھ ظ„ط§ط³ظ„ظƒظٹط© ط¹ط§ط²ظ„ط©', 'price': 149, 'image': 'ًںژ§', 'category': 'طµظˆطھظٹط§طھ'},
+    {'name': 'ط­ظ‚ظٹط¨ط© ط¸ظ‡ط± ظ„ظ„ظ…ط­ظ…ظˆظ„', 'price': 49, 'image': 'ًںژ’', 'category': 'ط¥ظƒط³ط³ظˆط§ط±ط§طھ'},
+  ];
+
+  final List<Map<String, dynamic>> _cart = [];
+
+  void _addToCart(Map<String, dynamic> product) {
+    setState(() {
+      _cart.add(product);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('طھظ… ط¥ط¶ط§ظپط© "${product['name']}" ط¥ظ„ظ‰ ط§ظ„ط³ظ„ط©!'),
+        backgroundColor: const Color(0xFF39FF14),
+        duration: const Duration(seconds: 1),
+      ),
+    );
+  }
+
+  void _showCartDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            double total = _cart.fold(0, (sum, item) => sum + item['price']);
+            return AlertDialog(
+              backgroundColor: const Color(0xFF1A1A1A),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              title: Row(
+                children: const [
+                  Icon(Icons.shopping_cart, color: Color(0xFF39FF14)),
+                  SizedBox(width: 8),
+                  Text('ط³ظ„ط© ط§ظ„ظ…ط´طھط±ظٹط§طھ', style: TextStyle(color: Colors.white)),
+                ],
+              ),
+              content: _cart.isEmpty
+                  ? const SizedBox(
+                      height: 100,
+                      child: Center(
+                        child: Text('ط§ظ„ط³ظ„ط© ظپط§ط±ط؛ط© ط­ط§ظ„ظٹط§ظ‹', style: TextStyle(color: Colors.white70)),
+                      ),
+                    )
+                  : SizedBox(
+                      width: double.maxFinite,
+                      height: 300,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: _cart.length,
+                              itemBuilder: (context, index) {
+                                final item = _cart[index];
+                                return ListTile(
+                                  leading: Text(item['image'], style: const TextStyle(fontSize: 24)),
+                                  title: Text(item['name'], style: const TextStyle(color: Colors.white)),
+                                  subtitle: Text('${item['price']} ط¯.ط£', style: const TextStyle(color: Color(0xFF39FF14))),
+                                  trailing: IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.redAccent),
+                                    onPressed: () {
+                                      setModalState(() {
+                                        _cart.removeAt(index);
+                                      });
+                                      setState(() {});
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const Divider(color: Colors.grey),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            key: UniqueKey(),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.between,
+                              children: [
+                                const Text('ط§ظ„ظ…ط¬ظ…ظˆط¹ ط§ظ„ط¥ط¬ظ…ط§ظ„ظٹ:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                                Text('$total ط¯.ط£', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF39FF14))),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('ط¥ط؛ظ„ط§ظ‚', style: TextStyle(color: Colors.grey)),
+                ),
+                if (_cart.isNotEmpty)
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF39FF14),
+                      foregroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _cart.clear();
+                      });
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('طھظ…طھ ط¹ظ…ظ„ظٹط© ط§ظ„ط´ط±ط§ط، ط¨ظ†ط¬ط§ط­! ًںژ‰'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    },
+                    child: const Text('ط¥طھظ…ط§ظ… ط§ظ„ط´ط±ط§ط،', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'طھطµظپط­ ط§ظ„ظ…ظ†طھط¬ط§طھ',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: const Color(0xFF1A1A1A),
+        centerTitle: true,
+        actions: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart, color: Colors.white),
+                onPressed: _showCartDialog,
+              ),
+              if (_cart.isNotEmpty)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF39FF14),
+                      shape: BoxShape.circle,
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    child: Text(
+                      '${_cart.length}',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: Center,
+                    ),
+                  ),
+                ),
+            ],
+          )
+        ],
+      ),
+      body: Column(
+        children: [
+          // Search Bar Simulated
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'ط§ط¨ط­ط« ط¹ظ† ط§ظ„ط³ظ„ط¹ ط§ظ„ظ…طھط§ط­ط©...',
+                hintStyle: const TextStyle(color: Colors.grey),
+                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                filled: true,
+                fillColor: const Color(0xFF1A1A1A),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Color(0xFF39FF14), width: 1),
+                ),
+              ),
+            ),
+          ),
+          // Product Grid
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: _products.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.8,
+              ),
+              itemBuilder: (context, index) {
+                final product = _products[index];
+                return Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1A1A1A),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFF2A2A2A)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          width: double.infinity,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF252525),
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              product['image'],
+                              style: const TextStyle(fontSize: 48),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              product['category'],
+                              style: const TextStyle(color: Colors.grey, fontSize: 11),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              product['name'],
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.between,
+                              children: [
+                                Text(
+                                  '${product['price']} ط¯.ط£',
+                                  style: const TextStyle(
+                                    color: Color(0xFF39FF14),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () => _addToCart(product),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xFF39FF14),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.add_shopping_cart,
+                                      color: Colors.black,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
